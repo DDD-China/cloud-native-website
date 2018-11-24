@@ -6,12 +6,14 @@ import {
 
 import Header from './components/Header/Header';
 import ProductListPage from './pages/ProductList/ProductListPage';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div>
+          <CssBaseline />
           <Header />
           <Route path="/" component={ProductListPage} />
         </div>
