@@ -19,7 +19,7 @@ class Header extends Component {
       <AppBar position="static" color="default" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            AliceMall
+            Cloud Native Mall
           </Typography>
         </Toolbar>
       </AppBar>
