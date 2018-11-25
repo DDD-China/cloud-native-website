@@ -30,7 +30,7 @@ class Header extends Component {
           <Typography variant="h6" color="inherit" className={classes.title}>
             <Link to="/" className={classes.titleLink}>Cloud Native Mall</Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button component={Link} to="/login" color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     );

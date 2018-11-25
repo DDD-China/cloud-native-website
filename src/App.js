@@ -4,9 +4,11 @@ import {
   Route,
 } from 'react-router-dom';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 import Header from './components/Header/Header';
 import ProductListPage from './pages/ProductList/ProductListPage';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import LoginPage from './pages/Login/LoginPage';
 
 class App extends Component {
   render() {
@@ -15,7 +17,8 @@ class App extends Component {
         <div>
           <CssBaseline />
           <Header />
-          <Route path="/" component={ProductListPage} />
+          <Route path="/" exact component={ProductListPage} />
+          <Route path="/login" component={LoginPage} />
         </div>
       </Router>
     );
