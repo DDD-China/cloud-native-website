@@ -54,12 +54,12 @@ function LoginPage(props) {
         </Typography>
         <form className={classes.form}>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="username">User Name</InputLabel>
-            <Input id="username" name="username" autoComplete="username" autoFocus />
+            <InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
+            <Input id="phoneNumber" name="phoneNumber" autoFocus />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
+            <Input name="password" type="password" id="password" />
           </FormControl>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

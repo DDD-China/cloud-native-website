@@ -97,12 +97,12 @@ class CheckoutPage extends Component {
           <>
             {activeStepIndex === steps.length ? (
               <>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom align="center">
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
+                  We have send SMS to you for your order confirmation, and will
+                  send you an update when your order has shipped. Please scan the QR code to pay in 15 minutes.
                 </Typography>
               </>
             ) : (
