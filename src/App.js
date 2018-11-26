@@ -9,7 +9,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './components/Header/Header';
 import ProductListPage from './pages/ProductList/ProductListPage';
 import LoginPage from './pages/Login/LoginPage';
-import RegistryPage from './pages/Registry/RegistryPage';
 
 class App extends Component {
   render() {
@@ -20,7 +19,6 @@ class App extends Component {
           <Header />
           <Route path="/" exact component={ProductListPage} />
           <Route path="/login" component={LoginPage} />
-          <Route path="/registry" component={RegistryPage} />
         </div>
       </Router>
     );

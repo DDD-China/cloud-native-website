@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -74,9 +73,6 @@ function LoginPage(props) {
             className={classes.submit}
           >
             Sign in
-          </Button>
-          <Button component={Link} to="registry" fullWidth className={classes.submit}>
-            Create an account
           </Button>
         </form>
       </Paper>
