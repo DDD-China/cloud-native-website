@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as queryString from 'query-string';
+import * as PropTypes from 'prop-types';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +9,6 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import * as queryString from 'query-string';
 
 const styles = theme => ({
   layout: {
@@ -131,5 +132,9 @@ class CheckoutPage extends Component {
     );
   }
 }
+
+CheckoutPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(CheckoutPage);
