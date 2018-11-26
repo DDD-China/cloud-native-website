@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
+import * as queryString from 'query-string';
+import { Link } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid/Grid';
 import Card from '@material-ui/core/Card/Card';
@@ -22,6 +24,9 @@ const styles = theme => ({
   cardContent: {
     flexGrow: 1,
   },
+  cardActions: {
+    flexDirection: 'row-reverse',
+  },
 });
 
 class ProductItem extends Component {
@@ -42,12 +47,19 @@ class ProductItem extends Component {
             This is a media card. You can use this section to describe the content.
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small" color="primary">
-            View
-          </Button>
-          <Button size="small" color="primary">
-            Edit
+        <CardActions className={classes.cardActions}>
+          <Button
+            component={Link}
+            to={{
+              pathname: '/checkout',
+              search: `?${queryString.stringify({
+                productId: this.props.data,
+              })}`,
+            }}
+            size="small"
+            color="primary"
+          >
+            Buy
           </Button>
         </CardActions>
       </Card>
@@ -57,6 +69,7 @@ class ProductItem extends Component {
 
 ProductItem.propTypes = {
   classes: PropTypes.object.isRequired,
+  data: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(ProductItem);

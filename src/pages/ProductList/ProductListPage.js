@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const products = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 class ProductListPage extends Component {
   render() {
@@ -32,8 +32,8 @@ class ProductListPage extends Component {
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40}>
-            {cards.map(card => (
-              <ProductItem key={card} />
+            {products.map(product => (
+              <ProductItem key={product} data={product} />
             ))}
           </Grid>
         </div>
