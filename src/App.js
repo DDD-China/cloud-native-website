@@ -10,6 +10,7 @@ import Header from './components/Header/Header';
 import ProductListPage from './pages/ProductList/ProductListPage';
 import LoginPage from './pages/Login/LoginPage';
 import CheckoutPage from './pages/Checkout/CheckoutPage';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 class App extends Component {
   render() {
@@ -20,7 +21,7 @@ class App extends Component {
           <Header />
           <Route path="/" exact component={ProductListPage} />
           <Route path="/login" component={LoginPage} />
-          <Route path="/checkout" component={CheckoutPage} />
+          <PrivateRoute path="/checkout" component={CheckoutPage} />
         </div>
       </Router>
     );

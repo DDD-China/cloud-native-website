@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
+import * as _ from 'lodash';
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,6 +11,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { login } from '../../utils/session';
+import { Redirect } from 'react-router-dom';
 
 const styles = theme => ({
   main: {
@@ -43,41 +46,55 @@ const styles = theme => ({
   },
 });
 
-function LoginPage(props) {
-  const { classes } = props;
+class LoginPage extends Component {
+  state = { redirectToReferrer: false };
 
-  return (
-    <main className={classes.main}>
-      <Paper className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form}>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
-            <Input id="phoneNumber" name="phoneNumber" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" />
-          </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+  handleSubmit = (event) => {
+    login().then(() => {
+      this.setState({ redirectToReferrer: true });
+    });
+    event.preventDefault();
+  };
+
+  render() {
+    if (this.state.redirectToReferrer) {
+      return <Redirect to={_.get(this.props, ['location', 'state', 'from'], '/')}/>
+    }
+
+    const { classes } = this.props;
+    return (
+      <main className={classes.main}>
+        <Paper className={classes.paper}>
+          <Typography component="h1" variant="h5">
             Sign in
-          </Button>
-        </form>
-      </Paper>
-    </main>
-  );
+          </Typography>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
+              <Input id="phoneNumber" name="phoneNumber" autoFocus />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input name="password" type="password" id="password" />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </main>
+    );
+  }
 }
 
 LoginPage.propTypes = {
