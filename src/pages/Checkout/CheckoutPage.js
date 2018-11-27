@@ -9,6 +9,9 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import OrderForm from '../../components/OrderForm/OrderForm';
+import AddressForm from '../../components/AddressForm/AddressForm';
+import OrderReview from '../../components/OrderReview/OrderReview';
 
 const styles = theme => ({
   layout: {
@@ -44,20 +47,18 @@ const styles = theme => ({
   },
 });
 
-const { productId } = queryString.parse(window.location.search);
-
 const steps = [
   {
     label: 'Create Order',
-    renderContent: () => productId,
+    renderContent: () => <OrderForm />,
   },
   {
     label: 'Fill Shipping Address',
-    renderContent: () => productId,
+    renderContent: () => <AddressForm />,
   },
   {
     label: 'Confirm Order',
-    renderContent: () => productId,
+    renderContent: () => <OrderReview />,
   },
 ];
 
