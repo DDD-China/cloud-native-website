@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as queryString from 'query-string';
 import * as PropTypes from 'prop-types';
 
 import Paper from '@material-ui/core/Paper';
@@ -12,6 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import OrderForm from '../../components/OrderForm/OrderForm';
 import AddressForm from '../../components/AddressForm/AddressForm';
 import OrderReview from '../../components/OrderReview/OrderReview';
+import Grid from '@material-ui/core/Grid';
+import QrCode from '../../components/QrCode/QrCode';
 
 const styles = theme => ({
   layout: {
@@ -106,6 +107,14 @@ class CheckoutPage extends Component {
                   We have send SMS to you for your order confirmation, and will
                   send you an update when your order has shipped. Please scan the QR code to pay in 15 minutes.
                 </Typography>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                >
+                  <QrCode text="https://www.example.com" alt="" />
+                </Grid>
               </>
             ) : (
               <>
