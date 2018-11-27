@@ -31,7 +31,7 @@ const styles = theme => ({
 
 class ProductItem extends Component {
   render() {
-    const classes = this.props.classes;
+    const { classes, data } = this.props;
     return <Grid item sm={6} md={4} lg={3}>
       <Card className={classes.card}>
         <CardMedia
@@ -41,10 +41,10 @@ class ProductItem extends Component {
         />
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h5" component="h2">
-            Heading
+            Product {data}
           </Typography>
           <Typography>
-            This is a media card. You can use this section to describe the content.
+            This is a product description.
           </Typography>
         </CardContent>
         <CardActions className={classes.cardActions}>
