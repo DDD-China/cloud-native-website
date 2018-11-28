@@ -113,6 +113,7 @@ class CheckoutPage extends Component {
         address: this.state.address,
         totalPrice: this.state.product.price * this.state.quantity,
       }).then((savedOrder) => {
+        console.log(savedOrder);
         this.setState(state => ({
           activeStepIndex: state.activeStepIndex + 1,
           savedOrder,

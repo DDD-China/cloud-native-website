@@ -71,4 +71,8 @@ OrderItem.propTypes = {
   }).isRequired,
 };
 
+OrderItem.defaultProps = {
+  order: {},
+};
+
 export default withStyles(styles)(OrderItem);

@@ -7,3 +7,10 @@ export const saveOrder = order =>
       'x-auth-token': getToken(),
     },
   }).then(response => response.data);
+
+export const fetchOrder = orderId =>
+  fetcher.get(`/orders/${orderId}`, {
+    headers: {
+      'x-auth-token': getToken(),
+    },
+  }).then(response => response.data);

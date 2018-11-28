@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Button from '@material-ui/core/Button/Button';
 import OrderItem from '../../components/OrderItem/OrderItem';
 import { withRouter } from 'react-router-dom';
+import * as orderApis from '../../apis/order';
+import * as productApis from '../../apis/product';
 
 const styles = theme => ({
   layout: {
@@ -39,9 +41,24 @@ const styles = theme => ({
 });
 
 class OrderDetailPage extends Component {
+  state = {
+    order: {},
+  };
+
   handleBack = () => {
     this.props.history.goBack();
   };
+
+  componentDidMount() {
+    orderApis.fetchOrder(this.props.match.params.id).then(order => {
+      this.setState({ order });
+      return productApis.fetchProduct(order.productId);
+    }).then(product => {
+      this.setState({
+        order: { ...this.state.order, product },
+      });
+    });
+  }
 
   render() {
     const { classes } = this.props;
@@ -51,7 +68,7 @@ class OrderDetailPage extends Component {
           <Typography component="h1" variant="h4" align="center">
             Order Information
           </Typography>
-          <OrderItem />
+          <OrderItem order={this.state.order} />
           <div className={classes.buttons}>
             <Button onClick={this.handleBack} className={classes.button}>
               Back
