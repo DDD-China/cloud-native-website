@@ -64,7 +64,8 @@ const steps = [
   },
   {
     label: 'Fill Shipping Address',
-    renderContent: () => <AddressForm />,
+    renderContent: ({ handleAddressChange }) =>
+      <AddressForm onChange={handleAddressChange} />,
   },
   {
     label: 'Confirm Order',
@@ -79,6 +80,7 @@ class CheckoutPage extends Component {
     activeStepIndex: 0,
     product: {},
     amount: this.initialAmount,
+    address: '',
   };
 
   componentDidMount() {
@@ -100,6 +102,10 @@ class CheckoutPage extends Component {
 
   handleAmountChange = (amount) => {
     this.setState({ amount });
+  };
+
+  handleAddressChange = (address) => {
+    this.setState({ address });
   };
 
   render() {
@@ -144,6 +150,7 @@ class CheckoutPage extends Component {
                   product: this.state.product,
                   initialAmount: this.initialAmount,
                   handleAmountChange: this.handleAmountChange,
+                  handleAddressChange: this.handleAddressChange,
                 })}
                 <div className={classes.buttons}>
                   {activeStepIndex !== 0 && (
