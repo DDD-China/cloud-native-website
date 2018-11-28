@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
 import ProductItem from '../../components/ProductItem/ProductItem';
+import * as productApis from '../../apis/product';
 
 const styles = theme => ({
   layout: {
@@ -23,16 +24,22 @@ const styles = theme => ({
   },
 });
 
-const products = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
 class ProductListPage extends Component {
+  state = {
+    products: [],
+  };
+
+  componentDidMount() {
+    productApis.fetchProductList().then(products => this.setState({ products }));
+  }
+
   render() {
     const classes = this.props.classes;
     return (
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40}>
-            {products.map(product => (
+            {this.state.products.map(product => (
               <ProductItem key={product} data={product} />
             ))}
           </Grid>
