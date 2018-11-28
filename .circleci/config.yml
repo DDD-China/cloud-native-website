@@ -32,7 +32,7 @@ jobs:
           paths:
             - docker-build
 
-build-docker:
+  build-docker:
     docker:
       - image: circleci/python:2
     working_directory: ~/cloud-native-website
