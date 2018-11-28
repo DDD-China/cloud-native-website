@@ -47,10 +47,12 @@ const styles = theme => ({
 });
 
 class LoginPage extends Component {
+  phoneNumberInput = null;
+  passwordInput = null;
   state = { redirectToReferrer: false };
 
   handleSubmit = (event) => {
-    login().then(() => {
+    login(this.phoneNumberInput.value, this.passwordInput.value).then(() => {
       this.setState({ redirectToReferrer: true });
     });
     event.preventDefault();
@@ -71,11 +73,21 @@ class LoginPage extends Component {
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
-              <Input id="phoneNumber" name="phoneNumber" autoFocus />
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                autoFocus
+                inputRef={component => {this.phoneNumberInput = component; }}
+              />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" />
+              <Input
+                name="password"
+                type="password"
+                id="password"
+                inputRef={component => {this.passwordInput = component; }}
+              />
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
