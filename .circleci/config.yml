@@ -51,7 +51,7 @@ jobs:
             export CIRCLE_BUILD_NUM_DOCKER="$(cat /tmp/workspace/docker-build/docker-build_number.txt)"
             echo ${CIRCLE_BUILD_NUM_DOCKER}
             $(aws ecr get-login --no-include-email)
-            export REPO_NAME=dmall-web
+            export REPO_NAME=cloud-native-website
             export ORG_NAME=com.dmall
             export AWS_ECR_REGISTRY=955065381857.dkr.ecr.cn-north-1.amazonaws.com.cn
             docker build -t $ORG_NAME/$REPO_NAME:latest .
@@ -75,7 +75,7 @@ jobs:
           name: Deploy service with kubectl
           command: |
             export CIRCLE_BUILD_NUM_DOCKER="$(cat /tmp/workspace/docker-build/docker-build_number.txt)"
-            sed -i "s/BUILD_VERSION/$CIRCLE_BUILD_NUM_DOCKER/g" dmall-web-kube.yaml
+            sed -i "s/BUILD_VERSION/$CIRCLE_BUILD_NUM_DOCKER/g" cloud-native-website-kube.yaml
             ./deploy.sh
 
 workflows:
