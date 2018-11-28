@@ -17,6 +17,7 @@ import Grid from '@material-ui/core/Grid';
 
 import QrCode from '../../components/QrCode/QrCode';
 import * as productApis from '../../apis/product';
+import * as orderApis from '../../apis/order';
 
 const styles = theme => ({
   layout: {
@@ -82,7 +83,20 @@ class CheckoutPage extends Component {
     product: {},
     quantity: this.initialQuantity,
     address: '',
+    savedOrder: {},
   };
+
+  get paymentUrl () {
+    return window.location.origin +
+      window.location.pathname +
+      this.props.history.createHref({
+        pathname: '/payment',
+        search: `?${queryString.stringify({
+          orderId: this.state.savedOrder.id,
+          amount: this.state.savedOrder.totalPrice,
+        })}`,
+      })
+  }
 
   componentDidMount() {
     const { productId } = queryString.parse(this.props.location.search);
@@ -90,9 +104,23 @@ class CheckoutPage extends Component {
   }
 
   handleNext = () => {
-    this.setState(state => ({
-      activeStepIndex: state.activeStepIndex + 1,
-    }));
+    if (this.state.activeStepIndex === steps.length - 1) {
+      orderApis.saveOrder({
+        productId: this.state.product.id,
+        quantity: this.state.quantity,
+        address: this.state.address,
+        totalPrice: this.state.product.price * this.state.quantity,
+      }).then((savedOrder) => {
+        this.setState(state => ({
+          activeStepIndex: state.activeStepIndex + 1,
+          savedOrder,
+        }));
+      });
+    } else {
+      this.setState(state => ({
+        activeStepIndex: state.activeStepIndex + 1,
+      }));
+    }
   };
 
   handleBack = () => {
@@ -142,7 +170,7 @@ class CheckoutPage extends Component {
                   justify="center"
                   alignItems="center"
                 >
-                  <QrCode text="https://www.example.com" alt="" />
+                  <QrCode text={this.paymentUrl} alt="scan to pay" />
                 </Grid>
               </>
             ) : (
