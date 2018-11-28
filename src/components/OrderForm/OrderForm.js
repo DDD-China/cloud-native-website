@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import * as _ from 'lodash';
+import * as PropTypes from 'prop-types';
+import AmountControl from '../AmountControl/AmountControl';
+
 import { withStyles } from '@material-ui/core/styles';
-import * as queryString from 'query-string';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import AmountControl from '../AmountControl/AmountControl';
 
 const styles = theme => ({
   thumbnail: {
@@ -14,27 +16,23 @@ const styles = theme => ({
   },
 });
 
-const { productId } = queryString.parse(window.location.search);
-const product = {
-  price: 123,
-};
-
 class OrderForm extends Component {
-  initialAmount = 1;
-
   state = {
-    amount: this.initialAmount,
+    amount: this.props.initialAmount,
   };
 
   get totalPrice() {
-    return this.state.amount * product.price;
+    return this.state.amount * this.props.product.price;
   }
 
-  handleAmountChange = amount => this.setState({ amount });
+  handleAmountChange = amount => {
+    this.props.onAmountChange(amount);
+    this.setState({ amount });
+  };
 
   render() {
     const classes = this.props.classes;
-    return (
+    return _.isEmpty(this.props.product) ? null : (
       <>
         <Typography variant="h6" gutterBottom>
           Order Items
@@ -49,15 +47,15 @@ class OrderForm extends Component {
           </Grid>
           <Grid item xs={6}>
             <Typography gutterBottom variant="h5" component="h5">
-              Product {productId}
+              {this.props.product.name}
             </Typography>
             <Typography>
-              This is product description.
+              {this.props.product.description}
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="body1" gutterBottom align="right">¥ {product.price.toFixed(2)}</Typography>
-            <AmountControl onChange={this.handleAmountChange} defaultValue={this.initialAmount} />
+            <Typography variant="body1" gutterBottom align="right">¥ {this.props.product.price.toFixed(2)}</Typography>
+            <AmountControl onChange={this.handleAmountChange} defaultValue={this.props.initialAmount} />
           </Grid>
         </Grid>
         <Typography variant="h6" align="right" className={classes.totalAmountText}>
@@ -69,6 +67,18 @@ class OrderForm extends Component {
 }
 
 OrderForm.propTypes = {
+  product: PropTypes.shape({
+    name: PropTypes.string,
+    description: PropTypes.string,
+    price: PropTypes.number,
+  }).isRequired,
+  initialAmount: PropTypes.number.isRequired,
+  onAmountChange: PropTypes.func.isRequired,
+};
+
+OrderForm.defaultProps = {
+  initialAmount: 1,
+  onAmountChange: _.noop,
 };
 
 export default withStyles(styles)(OrderForm);

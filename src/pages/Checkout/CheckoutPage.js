@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import * as queryString from 'query-string';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +14,9 @@ import OrderForm from '../../components/OrderForm/OrderForm';
 import AddressForm from '../../components/AddressForm/AddressForm';
 import OrderItem from '../../components/OrderItem/OrderItem';
 import Grid from '@material-ui/core/Grid';
+
 import QrCode from '../../components/QrCode/QrCode';
+import * as productApis from '../../apis/product';
 
 const styles = theme => ({
   layout: {
@@ -51,7 +55,12 @@ const styles = theme => ({
 const steps = [
   {
     label: 'Create Order',
-    renderContent: () => <OrderForm />,
+    renderContent: ({ product, initialAmount, handleAmountChange }) =>
+      <OrderForm
+        product={product}
+        initialAmount={initialAmount}
+        onAmountChange={handleAmountChange}
+      />,
   },
   {
     label: 'Fill Shipping Address',
@@ -64,9 +73,18 @@ const steps = [
 ];
 
 class CheckoutPage extends Component {
+  initialAmount = 1;
+
   state = {
     activeStepIndex: 0,
+    product: {},
+    amount: this.initialAmount,
   };
+
+  componentDidMount() {
+    const { productId } = queryString.parse(this.props.location.search);
+    productApis.fetchProduct(productId).then(product => this.setState({ product }));
+  }
 
   handleNext = () => {
     this.setState(state => ({
@@ -78,6 +96,10 @@ class CheckoutPage extends Component {
     this.setState(state => ({
       activeStepIndex: state.activeStepIndex - 1,
     }));
+  };
+
+  handleAmountChange = (amount) => {
+    this.setState({ amount });
   };
 
   render() {
@@ -118,7 +140,11 @@ class CheckoutPage extends Component {
               </>
             ) : (
               <>
-                {steps[activeStepIndex].renderContent()}
+                {steps[activeStepIndex].renderContent({
+                  product: this.state.product,
+                  initialAmount: this.initialAmount,
+                  handleAmountChange: this.handleAmountChange,
+                })}
                 <div className={classes.buttons}>
                   {activeStepIndex !== 0 && (
                     <Button onClick={this.handleBack} className={classes.button}>
@@ -145,6 +171,9 @@ class CheckoutPage extends Component {
 
 CheckoutPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
-export default withStyles(styles)(CheckoutPage);
+export default withStyles(styles)(withRouter(CheckoutPage));
