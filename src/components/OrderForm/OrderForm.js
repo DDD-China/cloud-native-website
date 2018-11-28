@@ -15,8 +15,23 @@ const styles = theme => ({
 });
 
 const { productId } = queryString.parse(window.location.search);
+const product = {
+  price: 123,
+};
 
 class OrderForm extends Component {
+  initialAmount = 1;
+
+  state = {
+    amount: this.initialAmount,
+  };
+
+  get totalPrice() {
+    return this.state.amount * product.price;
+  }
+
+  handleAmountChange = amount => this.setState({ amount });
+
   render() {
     const classes = this.props.classes;
     return (
@@ -41,12 +56,12 @@ class OrderForm extends Component {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="body1" gutterBottom align="right">¥ {(123).toFixed(2)}</Typography>
-            <AmountControl />
+            <Typography variant="body1" gutterBottom align="right">¥ {product.price.toFixed(2)}</Typography>
+            <AmountControl onChange={this.handleAmountChange} defaultValue={this.initialAmount} />
           </Grid>
         </Grid>
         <Typography variant="h6" align="right" className={classes.totalAmountText}>
-          Total: ¥ {(123).toFixed(2)}
+          Total: ¥ {this.totalPrice.toFixed(2)}
         </Typography>
       </>
     );
