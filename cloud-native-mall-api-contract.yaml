@@ -1,0 +1,347 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Cloud Native Mall"
+paths:
+  /session:
+    post:
+      summary: "user login"
+      description: "user login"
+      parameters: 
+        - in: "body"
+          name: "user"
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Session'
+
+  /products:
+    post:
+      summary: "create product"
+      description: "create product"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        201:
+          description: Created
+    get:
+      summary: "fetch product list"
+      description: "fetch product list"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Product'
+    
+  /products/{productId}:
+    put:
+      summary: "update product sale status"
+      description: "update product sale status"
+      parameters:
+        - in: "path"
+          name: "productId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        200:
+          description: OK
+    get:
+      summary: "fetch each product detail"
+      description: "fetch each product detail"
+      parameters: 
+        - in: "path"
+          name: "productId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Product'
+
+  /orders:
+    post:
+      summary: "Create an order"
+      description: "Create an order"
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        201:
+          description: OK
+          
+  /orders/{orderId}:
+    get:
+      summary: "Fetch each order detail."
+      description: "Fetch each order detail."
+      parameters: 
+        - in: "path"
+          name: "orderId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Order'
+    put:
+      summary: "Update each order detail."
+      description: "Update each order detail."
+      parameters: 
+        - in: "path"
+          name: "orderId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        200:
+          description: OK
+    
+  /payments:
+    post:
+      summary: "Pay an order."
+      description: "Pay an order."
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Payment'
+      responses:
+        200:
+          description: OK
+    
+    get:
+      summary: "Fetch order's payment info."
+      description: "Fetch order's payment info."
+      parameters: 
+        - in: "query"
+          name: "orderId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Payment'
+  
+  /shippings:
+    post:
+      summary: "Stock out"
+      description: "Stock out"
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Shipping'
+      responses:
+        201:
+          description: OK
+    get:
+      summary: "Fetch order's shipping info."
+      description: "Fetch order's shipping info."
+      parameters:
+        - in: "query"
+          name: "orderId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Shipping'
+    
+  
+  /shippings/{shippingId}/logistics:
+    post:
+      summary: "Update a new logistics info."
+      description: "Update a new logistics info."
+      parameters:
+        - in: "path"
+          name: "shippingId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Logistics'
+      responses:
+        200:
+          description: OK
+  
+  /inventories:
+    post:
+      summary: "Increase product quantity."
+      description: "Increase product quantity."
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/Inventory'
+      responses:
+        200:
+          description: OK
+  
+  /inventories/lock:
+    post:
+      summary: ""
+      description: ""
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/InventoryLock'
+      responses:
+        201:
+          description: OK
+    
+  /inventories/deduction:
+    post:
+      summary: ""
+      description: ""
+      parameters: 
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/InventoryDeduction'
+      responses:
+        201:
+          description: OK  
+    
+definitions:
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+      quantity:
+        type: "integer"
+        format: "int32"
+      price:
+        type: "number"
+        format: "price"
+      isOnSale:
+        type: "boolean"
+
+  User:
+    type: "object"
+    properties:
+      phoneNumber:
+        type: "string"
+      password:
+        type: "string"
+
+  Session:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        
+  Order:
+    type: "object"
+    properties:
+      productId:
+        type: "string"
+      quantity:
+        type: "number"
+      address:
+        type: "string"
+      totalPrice:
+        type: "number"
+      phoneNumber:
+        type: "string"
+      isPayed:
+        type: "boolean"
+  
+  Payment:
+    type: "object"
+    properties:
+      orderId:
+        type: "string"
+      method:
+        type: "string"
+      amount:
+        type: "number"
+  
+  Shipping:
+    type: "object"
+    properties:
+      orderId:
+        type: "string"
+      productId:
+        type: "string"
+      quantity:
+        type: "number"
+      address:
+        type: "string"
+      logistics:
+        type: "array"
+        items:
+          $ref: '#/definitions/Logistics'
+
+  Logistics:
+    type: "object"
+    properties:
+      orderId:
+        type: "string"
+      express:
+        type: "string"
+      info:
+        type: "string"
+      updateAt:
+        type: "string"
+  
+  Inventory:
+    type: "object"
+    properties:
+      productId:
+        type: "string"
+      quantity:
+        type: "number"
+  
+  InventoryLock:
+    type: "object"
+    properties:
+      productId:
+        type: "string"
+      quantity:
+        type: "number"
+        
+  InventoryDeduction:
+    type: "object"
+    properties:
+      productId:
+        type: "string"
+      quantity:
+        type: "number"
