@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import OrderForm from '../../components/OrderForm/OrderForm';
 import AddressForm from '../../components/AddressForm/AddressForm';
-import OrderReview from '../../components/OrderReview/OrderReview';
+import OrderItem from '../../components/OrderItem/OrderItem';
 import Grid from '@material-ui/core/Grid';
 import QrCode from '../../components/QrCode/QrCode';
 
@@ -59,7 +59,7 @@ const steps = [
   },
   {
     label: 'Confirm Order',
-    renderContent: () => <OrderReview />,
+    renderContent: () => <OrderItem />,
   },
 ];
 

@@ -18,7 +18,7 @@ const products = [
 
 const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 
-class OrderReview extends Component {
+class OrderItem extends Component {
   render() {
     const { classes } = this.props;
     return (
@@ -52,6 +52,6 @@ class OrderReview extends Component {
   }
 }
 
-OrderReview.propTypes = {};
+OrderItem.propTypes = {};
 
-export default withStyles(styles)(OrderReview);
+export default withStyles(styles)(OrderItem);
