@@ -26,11 +26,11 @@ jobs:
       - run:
           name: Install Python
           command: |
-            sudo apt install python2.7 python-pip
+            sudo apt install python3 python3-pip python3-setuptools groff less
       - run:
           name: Install aws cli
           command: |
-            sudo pip install awscli
+            sudo pip3 install awscli
       - run:
           name: Tag and push docker image
           command: |
