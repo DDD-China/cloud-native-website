@@ -80,7 +80,7 @@ class Header extends Component {
                 open={open}
                 onClose={this.handleClose}
               >
-                <MenuItem onClick={this.handleClose}>Orders</MenuItem>
+                <MenuItem component={Link} to="/orders/1" onClick={this.handleClose}>Review Orders</MenuItem>
                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
               </Menu>
             </>
