@@ -11,23 +11,23 @@ const styles = theme => ({
   thumbnail: {
     width: '100%',
   },
-  totalAmountText: {
+  totalQuantityText: {
     marginTop: '16px',
   },
 });
 
 class OrderForm extends Component {
   state = {
-    amount: this.props.initialAmount,
+    quantity: this.props.initialQuantity,
   };
 
   get totalPrice() {
-    return this.state.amount * this.props.product.price;
+    return this.state.quantity * this.props.product.price;
   }
 
-  handleAmountChange = amount => {
-    this.props.onAmountChange(amount);
-    this.setState({ amount });
+  handleQuantityChange = quantity => {
+    this.props.onQuantityChange(quantity);
+    this.setState({ quantity });
   };
 
   render() {
@@ -55,10 +55,10 @@ class OrderForm extends Component {
           </Grid>
           <Grid item xs={3}>
             <Typography variant="body1" gutterBottom align="right">¥ {this.props.product.price.toFixed(2)}</Typography>
-            <AmountControl onChange={this.handleAmountChange} defaultValue={this.props.initialAmount} />
+            <AmountControl onChange={this.handleQuantityChange} defaultValue={this.props.initialQuantity} />
           </Grid>
         </Grid>
-        <Typography variant="h6" align="right" className={classes.totalAmountText}>
+        <Typography variant="h6" align="right" className={classes.totalQuantityText}>
           Total: ¥ {this.totalPrice.toFixed(2)}
         </Typography>
       </>
@@ -72,13 +72,13 @@ OrderForm.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
-  initialAmount: PropTypes.number.isRequired,
-  onAmountChange: PropTypes.func.isRequired,
+  initialQuantity: PropTypes.number.isRequired,
+  onQuantityChange: PropTypes.func.isRequired,
 };
 
 OrderForm.defaultProps = {
-  initialAmount: 1,
-  onAmountChange: _.noop,
+  initialQuantity: 1,
+  onQuantityChange: _.noop,
 };
 
 export default withStyles(styles)(OrderForm);

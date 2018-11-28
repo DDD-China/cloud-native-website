@@ -55,11 +55,11 @@ const styles = theme => ({
 const steps = [
   {
     label: 'Create Order',
-    renderContent: ({ product, initialAmount, handleAmountChange }) =>
+    renderContent: ({ product, initialQuantity, handleQuantityChange }) =>
       <OrderForm
         product={product}
-        initialAmount={initialAmount}
-        onAmountChange={handleAmountChange}
+        initialQuantity={initialQuantity}
+        onQuantityChange={handleQuantityChange}
       />,
   },
   {
@@ -69,17 +69,18 @@ const steps = [
   },
   {
     label: 'Confirm Order',
-    renderContent: () => <OrderItem />,
+    renderContent: ({ product, quantity, address }) =>
+      <OrderItem order={{ product, quantity, address }} />,
   },
 ];
 
 class CheckoutPage extends Component {
-  initialAmount = 1;
+  initialQuantity = 1;
 
   state = {
     activeStepIndex: 0,
     product: {},
-    amount: this.initialAmount,
+    quantity: this.initialQuantity,
     address: '',
   };
 
@@ -100,8 +101,8 @@ class CheckoutPage extends Component {
     }));
   };
 
-  handleAmountChange = (amount) => {
-    this.setState({ amount });
+  handleQuantityChange = (quantity) => {
+    this.setState({ quantity });
   };
 
   handleAddressChange = (address) => {
@@ -148,8 +149,10 @@ class CheckoutPage extends Component {
               <>
                 {steps[activeStepIndex].renderContent({
                   product: this.state.product,
-                  initialAmount: this.initialAmount,
-                  handleAmountChange: this.handleAmountChange,
+                  quantity: this.state.quantity,
+                  address: this.state.address,
+                  initialQuantity: this.initialQuantity,
+                  handleQuantityChange: this.handleQuantityChange,
                   handleAddressChange: this.handleAddressChange,
                 })}
                 <div className={classes.buttons}>

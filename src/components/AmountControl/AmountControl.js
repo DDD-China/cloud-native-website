@@ -13,20 +13,24 @@ class AmountControl extends Component {
   input = null;
 
   handleDecrease = () => {
-    this.input.value = this.input.value > this.minimumAmount ?
-      _.toNumber(this.input.value) - 1 : this.minimumAmount;
-    this.props.onChange(this.input.value);
+    this.input.value = this.currentValue > this.minimumAmount ?
+      _.toNumber(this.currentValue) - 1 : this.minimumAmount;
+    this.props.onChange(this.currentValue);
   };
 
   handleIncrease = () => {
-    this.input.value = _.toNumber(this.input.value) + 1;
-    this.props.onChange(this.input.value);
+    this.input.value = _.toNumber(this.currentValue) + 1;
+    this.props.onChange(this.currentValue);
   };
 
+  get currentValue() {
+    return _.toNumber(this.input.value);
+  }
+
   handleChange = () => {
-    this.input.value = this.input.value > this.minimumAmount ?
-      this.input.value : this.minimumAmount;
-    this.props.onChange(this.input.value);
+    this.input.value = this.currentValue > this.minimumAmount ?
+      this.currentValue : this.minimumAmount;
+    this.props.onChange(this.currentValue);
   };
 
   render() {
