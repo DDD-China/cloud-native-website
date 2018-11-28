@@ -4,64 +4,60 @@ jobs:
     docker:
       - image: circleci/node:7.10
     working_directory: ~/cloud-native-website
-
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run: npm install
       - save_cache:
           paths:
-            - node_modules
+            - ~/.gradle
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm run build
       - store_artifacts:
           path: build
-
       - run:
-          name: Install Python
+          name: Save build version and artifacts
           command: |
-            sudo apt-get update && \
-              apt-get install -y \
-              python3 \
-              python3-pip \
-              python3-setuptools \
-              groff \
-              less \
-              && pip3 install --upgrade pip \
-              && apt-get clean
-      - run:
-          name: Install aws cli
-          command: |
-            sudo pip3 --no-cache-dir install --upgrade awscli
-      - run:
-          name: Tag and push docker image
-          command: |
-            export CIRCLE_BUILD_NUM_DOCKER="$(cat /tmp/workspace/docker-build/docker-build_number.txt)"
-            echo ${CIRCLE_BUILD_NUM_DOCKER}
-            $(aws ecr get-login --no-include-email)
-            export REPO_NAME=dmall-web
-            export ORG_NAME=com.dmall
-            export AWS_ECR_REGISTRY=955065381857.dkr.ecr.cn-north-1.amazonaws.com.cn
-            docker build -t $AWS_ECR_REGISTRY/$REPO_NAME:latest .
-            docker tag $AWS_ECR_REGISTRY/$REPO_NAME:latest $AWS_ECR_REGISTRY/$REPO_NAME:$CIRCLE_BUILD_NUM_DOCKER
-            docker push $AWS_ECR_REGISTRY/$REPO_NAME:$CIRCLE_BUILD_NUM_DOCKER
-            docker push $AWS_ECR_REGISTRY/$REPO_NAME:latest
-      - run:
-          name: Save build version
-          command: |
-            CIRCLE_BUILD_NUM_DOCKER=0.1.$CIRCLE_BUILD_NUM
             mkdir -p /tmp/workspace/docker-build
+            cp -r build /tmp/workspace/docker-build/build
+            CIRCLE_BUILD_NUM_DOCKER=0.1.$CIRCLE_BUILD_NUM
             echo ${CIRCLE_BUILD_NUM_DOCKER} > /tmp/workspace/docker-build/docker-build_number.txt
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
             - docker-build
+
+  build-docker:
+    docker:
+      - image: circleci/python:2
+    working_directory: ~/cloud-native-website
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install aws cli
+          command: |
+            sudo pip install awscli
+      - attach_workspace: &attach_workspace
+          at: /tmp/workspace
+      - run:
+          name: Tag and push docker image
+          command: |
+            cp -r /tmp/workspace/docker-build/build build
+            export CIRCLE_BUILD_NUM_DOCKER="$(cat /tmp/workspace/docker-build/docker-build_number.txt)"
+            echo ${CIRCLE_BUILD_NUM_DOCKER}
+            $(aws ecr get-login --no-include-email)
+            export REPO_NAME=cloud-native-website
+            export ORG_NAME=com.dmall
+            export AWS_ECR_REGISTRY=955065381857.dkr.ecr.cn-north-1.amazonaws.com.cn
+            docker tag $ORG_NAME/$REPO_NAME:latest $AWS_ECR_REGISTRY/$REPO_NAME:$CIRCLE_BUILD_NUM_DOCKER
+            docker push $AWS_ECR_REGISTRY/$REPO_NAME:$CIRCLE_BUILD_NUM_DOCKER
+            docker tag $ORG_NAME/$REPO_NAME:latest $AWS_ECR_REGISTRY/$REPO_NAME:latest
+            docker push $AWS_ECR_REGISTRY/$REPO_NAME:latest
 
   deploy-aws:
     docker:
@@ -86,6 +82,10 @@ workflows:
   build-deploy:
     jobs:
       - build
+      - build-docker:
+          requires:
+            - build
       - deploy-aws:
           requires:
             - build
+            - build-docker
