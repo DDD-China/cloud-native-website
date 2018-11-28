@@ -12,6 +12,7 @@ import LoginPage from './pages/Login/LoginPage';
 import CheckoutPage from './pages/Checkout/CheckoutPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import OrderDetailPage from './pages/OrderDetail/OrderDetailPage';
+import PaymentPage from './pages/Payment/PaymentPage';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path="/login" component={LoginPage} />
           <PrivateRoute path="/checkout" component={CheckoutPage} />
           <PrivateRoute path="/orders/:id" component={OrderDetailPage} />
+          <Route path="/payment" component={PaymentPage} />
         </div>
       </Router>
     );
