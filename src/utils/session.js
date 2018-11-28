@@ -7,7 +7,10 @@ export const getToken = () => Cookies.get('token');
 export const hasLogin = () => !_.isNil(getToken());
 
 export const login = (phoneNumber, password) =>
-  userApis.auth(phoneNumber, password).then(token => Cookies.set('token', token));
+  userApis.auth(phoneNumber, password).then(token => {
+    Cookies.set('token', token);
+    localStorage.setItem('phoneNumber', phoneNumber);
+  });
 
 export const logout = () =>
   Promise.resolve()

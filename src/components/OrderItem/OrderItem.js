@@ -49,7 +49,7 @@ class OrderItem extends Component {
             <Typography variant="h6" gutterBottom className={classes.title}>
               Shipping
             </Typography>
-            <Typography gutterBottom>{this.props.order.address}</Typography>
+            <Typography gutterBottom>{this.props.order.address} {this.props.order.phoneNumber}</Typography>
           </>
         )}
       </>
@@ -67,6 +67,7 @@ OrderItem.propTypes = {
     }).isRequired,
     quantity: PropTypes.number.isRequired,
     address: PropTypes.string.isRequired,
+    phoneNumber: PropTypes.string.isRequired,
   }).isRequired,
 };
 

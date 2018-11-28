@@ -70,8 +70,8 @@ const steps = [
   },
   {
     label: 'Confirm Order',
-    renderContent: ({ product, quantity, address }) =>
-      <OrderItem order={{ product, quantity, address }} />,
+    renderContent: ({ product, quantity, address, phoneNumber }) =>
+      <OrderItem order={{ product, quantity, address, phoneNumber }} />,
   },
 ];
 
@@ -84,6 +84,7 @@ class CheckoutPage extends Component {
     quantity: this.initialQuantity,
     address: '',
     savedOrder: {},
+    phoneNumber: localStorage.getItem('phoneNumber'),
   };
 
   get paymentUrl () {
@@ -107,6 +108,7 @@ class CheckoutPage extends Component {
     if (this.state.activeStepIndex === steps.length - 1) {
       orderApis.saveOrder({
         productId: this.state.product.id,
+        phoneNumber: this.state.phoneNumber,
         quantity: this.state.quantity,
         address: this.state.address,
         totalPrice: this.state.product.price * this.state.quantity,
@@ -182,6 +184,7 @@ class CheckoutPage extends Component {
                   initialQuantity: this.initialQuantity,
                   handleQuantityChange: this.handleQuantityChange,
                   handleAddressChange: this.handleAddressChange,
+                  phoneNumber: this.state.phoneNumber,
                 })}
                 <div className={classes.buttons}>
                   {activeStepIndex !== 0 && (
