@@ -10,8 +10,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 class AmountControl extends Component {
   render() {
     return (
-      <Grid container spacing={8} alignItems="flex-end" justify="flex-end">
-        <Grid item xs={3}>
+      <Grid container spacing={0} alignItems="flex-end" justify="flex-end">
+        <Grid item xs={3} container justify="center">
           <ButtonBase>
             <RemoveIcon />
           </ButtonBase>
@@ -25,7 +25,7 @@ class AmountControl extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={3} container justify="center">
           <ButtonBase>
             <AddIcon />
           </ButtonBase>
