@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as _ from 'lodash';
 import * as PropTypes from 'prop-types';
 import * as queryString from 'query-string';
 import { Link } from 'react-router-dom';
@@ -47,9 +48,11 @@ class ProductItem extends Component {
             <Typography>
               {data.description}
             </Typography>
-            <Typography>
-              ¥ {data.price.toFixed(2)}
-            </Typography>
+            {!_.isNil(data.price) && (
+              <Typography>
+                ¥ {data.price.toFixed(2)}
+              </Typography>
+            )}
           </CardContent>
           <CardActions className={classes.cardActions}>
             <Button

@@ -40,7 +40,7 @@ class ProductListPage extends Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40}>
             {this.state.products.map(product => (
-              <ProductItem key={product} data={product} />
+              <ProductItem key={product.id} data={product} />
             ))}
           </Grid>
         </div>
