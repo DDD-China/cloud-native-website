@@ -7,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import * as PropTypes from 'prop-types';
 import * as _ from 'lodash';
+import Avatar from '@material-ui/core/Avatar/Avatar';
+import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 
 const styles = theme => ({
   listItem: {
@@ -21,7 +23,7 @@ class OrderItem extends Component {
   }
 
   render() {
-    const { classes, order } = this.props;
+    const { classes, order, logistics } = this.props;
     return this.shouldRender && (
       <>
         <Typography variant="h6" gutterBottom>
@@ -58,6 +60,17 @@ class OrderItem extends Component {
               Shipping
             </Typography>
             <Typography gutterBottom>{order.address} {order.phoneNumber}</Typography>
+            {logistics.map(item => (
+              <ListItem>
+                <Avatar>
+                  <CardGiftcardIcon />
+                </Avatar>
+                <ListItemText
+                  primary={`${item.express}: ${item.info}`}
+                  secondary={new Date(item.updateAt).toLocaleString()}
+                />
+              </ListItem>
+            ))}
           </>
         )}
       </>
@@ -72,16 +85,22 @@ OrderItem.propTypes = {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
-    }).isRequired,
-    quantity: PropTypes.number.isRequired,
-    address: PropTypes.string.isRequired,
-    phoneNumber: PropTypes.string.isRequired,
+    }),
+    quantity: PropTypes.number,
+    address: PropTypes.string,
+    phoneNumber: PropTypes.string,
     paid: PropTypes.bool,
   }).isRequired,
+  logistics: PropTypes.arrayOf(PropTypes.shape({
+    express: PropTypes.string,
+    info: PropTypes.string,
+    updateAt: PropTypes.string,
+  })).isRequired,
 };
 
 OrderItem.defaultProps = {
   order: {},
+  logistics: [],
 };
 
 export default withStyles(styles)(OrderItem);

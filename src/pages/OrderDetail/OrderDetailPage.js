@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as _ from 'lodash';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper/Paper';
@@ -9,6 +10,7 @@ import { Link, withRouter } from 'react-router-dom';
 import * as orderApis from '../../apis/order';
 import * as productApis from '../../apis/product';
 import { getPaymentUri } from '../../utils/payment';
+import * as shippingApis from '../../apis/shipping';
 
 const styles = theme => ({
   layout: {
@@ -44,6 +46,7 @@ const styles = theme => ({
 class OrderDetailPage extends Component {
   state = {
     order: {},
+    logistics: [],
   };
 
   handleBack = () => {
@@ -51,13 +54,17 @@ class OrderDetailPage extends Component {
   };
 
   componentDidMount() {
-    orderApis.fetchOrder(this.props.match.params.id).then(order => {
+    const orderId = this.props.match.params.id;
+    orderApis.fetchOrder(orderId).then(order => {
       this.setState({ order });
       return productApis.fetchProduct(order.productId);
     }).then(product => {
       this.setState({
         order: { ...this.state.order, product },
       });
+    });
+    shippingApis.fetchShippings(orderId).then(shippings => {
+      this.setState({ logistics: _.chain(shippings).map('logistics').flatten().value() });
     });
   }
 
@@ -69,7 +76,7 @@ class OrderDetailPage extends Component {
           <Typography component="h1" variant="h4" align="center">
             Order Information
           </Typography>
-          <OrderItem order={this.state.order} />
+          <OrderItem order={this.state.order} logistics={this.state.logistics} />
           <div className={classes.buttons}>
             <Button onClick={this.handleBack} className={classes.button}>
               Back
