@@ -21,18 +21,18 @@ class OrderItem extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, order } = this.props;
     return this.shouldRender && (
       <>
         <Typography variant="h6" gutterBottom>
           Order summary
         </Typography>
         <List disablePadding>
-          {[this.props.order.product].map(product => (
+          {[order.product].map(product => (
             <ListItem className={classes.listItem} key={product.name}>
               <ListItemText primary={product.name} secondary={product.description} />
               <Grid container direction="column">
-                <Typography align="right">x{this.props.order.quantity}</Typography>
+                <Typography align="right">x{order.quantity}</Typography>
                 <Typography align="right">¥{product.price.toFixed(2)}</Typography>
               </Grid>
             </ListItem>
@@ -40,16 +40,24 @@ class OrderItem extends Component {
           <ListItem className={classes.listItem}>
             <ListItemText primary="Total" />
             <Typography variant="subtitle1" className={classes.total}>
-              {(this.props.order.product.price * this.props.order.quantity).toFixed(2)}
+              {(order.product.price * order.quantity).toFixed(2)}
             </Typography>
           </ListItem>
+          {!_.isNil(order.paid) && (
+            <ListItem className={classes.listItem}>
+              <ListItemText primary="Payment status" />
+              <Typography variant="subtitle1" color="textPrimary" className={classes.total}>
+                {order.paid ? 'Paid' : 'Unpaid'}
+              </Typography>
+            </ListItem>
+          )}
         </List>
-        {!_.isNil(this.props.order.address) && (
+        {!_.isNil(order.address) && (
           <>
             <Typography variant="h6" gutterBottom className={classes.title}>
               Shipping
             </Typography>
-            <Typography gutterBottom>{this.props.order.address} {this.props.order.phoneNumber}</Typography>
+            <Typography gutterBottom>{order.address} {order.phoneNumber}</Typography>
           </>
         )}
       </>
@@ -68,6 +76,7 @@ OrderItem.propTypes = {
     quantity: PropTypes.number.isRequired,
     address: PropTypes.string.isRequired,
     phoneNumber: PropTypes.string.isRequired,
+    paid: PropTypes.bool,
   }).isRequired,
 };
 

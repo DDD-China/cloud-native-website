@@ -3,21 +3,22 @@ import * as PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import * as queryString from 'query-string';
 
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import OrderForm from '../../components/OrderForm/OrderForm';
 import AddressForm from '../../components/AddressForm/AddressForm';
 import OrderItem from '../../components/OrderItem/OrderItem';
-import Grid from '@material-ui/core/Grid';
 
 import QrCode from '../../components/QrCode/QrCode';
 import * as productApis from '../../apis/product';
 import * as orderApis from '../../apis/order';
+import { getPaymentUri } from '../../utils/payment';
 
 const styles = theme => ({
   layout: {
@@ -87,16 +88,10 @@ class CheckoutPage extends Component {
     phoneNumber: localStorage.getItem('phoneNumber'),
   };
 
-  get paymentUrl () {
+  get paymentUrl() {
     return window.location.origin +
       window.location.pathname +
-      this.props.history.createHref({
-        pathname: '/payment',
-        search: `?${queryString.stringify({
-          orderId: this.state.savedOrder.id,
-          amount: this.state.savedOrder.totalPrice,
-        })}`,
-      })
+      this.props.history.createHref(getPaymentUri(this.state.savedOrder));
   }
 
   componentDidMount() {
@@ -165,7 +160,8 @@ class CheckoutPage extends Component {
                 </Typography>
                 <Typography variant="subtitle1">
                   We have send SMS to you for your order confirmation, and will
-                  send you an update when your order has shipped. Please scan the QR code to pay in 15 minutes.
+                  send you an update when your order has shipped. Please scan the QR code to pay in
+                  15 minutes.
                 </Typography>
                 <Grid
                   container

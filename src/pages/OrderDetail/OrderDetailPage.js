@@ -5,9 +5,10 @@ import Paper from '@material-ui/core/Paper/Paper';
 import Typography from '@material-ui/core/Typography/Typography';
 import Button from '@material-ui/core/Button/Button';
 import OrderItem from '../../components/OrderItem/OrderItem';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import * as orderApis from '../../apis/order';
 import * as productApis from '../../apis/product';
+import { getPaymentUri } from '../../utils/payment';
 
 const styles = theme => ({
   layout: {
@@ -73,6 +74,18 @@ class OrderDetailPage extends Component {
             <Button onClick={this.handleBack} className={classes.button}>
               Back
             </Button>
+            {!this.state.order.paid && (
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                component={Link}
+                to={getPaymentUri(this.state.order)}
+                target="_blank"
+              >
+                Pay
+              </Button>
+            )}
           </div>
         </Paper>
       </main>
